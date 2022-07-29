@@ -23,44 +23,49 @@
 package com.raywenderlich.galacticon
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.activity_main.*
 import java.io.IOException
-import java.util.*
 
 class MainActivity : AppCompatActivity(), ImageRequester.ImageRequesterResponse {
 
-  private var photosList: ArrayList<Photo> = ArrayList()
-  private lateinit var imageRequester: ImageRequester
+    private var photosList: ArrayList<Photo> = ArrayList()
+    private lateinit var imageRequester: ImageRequester
+    private lateinit var linearLayoutManager: LinearLayoutManager
 
-  override fun onCreateOptionsMenu(menu: Menu): Boolean {
-    menuInflater.inflate(R.menu.menu_main, menu)
-    return true
-  }
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
-
-    imageRequester = ImageRequester(this)
-  }
-
-  override fun onStart() {
-    super.onStart()
-  }
-
-  private fun requestPhoto() {
-    try {
-      imageRequester.getPhoto()
-    } catch (e: IOException) {
-      e.printStackTrace()
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
     }
 
-  }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
-  override fun receivedNewPhoto(newPhoto: Photo) {
-    runOnUiThread {
-      photosList.add(newPhoto)
+      linearLayoutManager = LinearLayoutManager(this)
+      recyclerView.layoutManager = linearLayoutManager
+
+      imageRequester = ImageRequester(this)
     }
-  }
+
+    override fun onStart() {
+        super.onStart()
+    }
+
+    private fun requestPhoto() {
+        try {
+            imageRequester.getPhoto()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+    }
+
+    override fun receivedNewPhoto(newPhoto: Photo) {
+        runOnUiThread {
+            photosList.add(newPhoto)
+        }
+    }
 }
