@@ -24,6 +24,7 @@ package com.raywenderlich.galacticon
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,10 +39,13 @@ class MainActivity : AppCompatActivity(), ImageRequester.ImageRequesterResponse 
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var adapter: RecyclerAdapter
     private lateinit var gridLayoutManager: GridLayoutManager
-
-
     private val lastVisibleItemPosition: Int
-        get() = linearLayoutManager.findLastVisibleItemPosition()
+        get() = if (recyclerView.layoutManager == linearLayoutManager) {
+            linearLayoutManager.findLastVisibleItemPosition()
+        } else {
+            gridLayoutManager.findLastVisibleItemPosition()
+        }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -107,6 +111,14 @@ class MainActivity : AppCompatActivity(), ImageRequester.ImageRequesterResponse 
 
             recyclerView.layoutManager = linearLayoutManager
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_change_recycler_manager) {
+            changeLayoutManager()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
 
