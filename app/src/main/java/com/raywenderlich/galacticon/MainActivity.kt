@@ -25,6 +25,7 @@ package com.raywenderlich.galacticon
 import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -36,6 +37,8 @@ class MainActivity : AppCompatActivity(), ImageRequester.ImageRequesterResponse 
     private lateinit var imageRequester: ImageRequester
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var adapter: RecyclerAdapter
+    private lateinit var gridLayoutManager: GridLayoutManager
+
 
     private val lastVisibleItemPosition: Int
         get() = linearLayoutManager.findLastVisibleItemPosition()
@@ -55,6 +58,9 @@ class MainActivity : AppCompatActivity(), ImageRequester.ImageRequesterResponse 
         recyclerView.adapter = adapter
 
         imageRequester = ImageRequester(this)
+        setRecyclerViewScrollListener()
+        gridLayoutManager = GridLayoutManager(this, 2)
+
     }
 
     override fun onStart() {
@@ -70,7 +76,6 @@ class MainActivity : AppCompatActivity(), ImageRequester.ImageRequesterResponse 
         } catch (e: IOException) {
             e.printStackTrace()
         }
-
     }
 
     override fun receivedNewPhoto(newPhoto: Photo) {
@@ -91,4 +96,17 @@ class MainActivity : AppCompatActivity(), ImageRequester.ImageRequesterResponse 
             }
         })
     }
+
+    private fun changeLayoutManager() {
+        if (recyclerView.layoutManager == linearLayoutManager) {
+            recyclerView.layoutManager = gridLayoutManager
+            if (photosList.size == 1) {
+                requestPhoto()
+            }
+        } else {
+
+            recyclerView.layoutManager = linearLayoutManager
+        }
+    }
 }
+
