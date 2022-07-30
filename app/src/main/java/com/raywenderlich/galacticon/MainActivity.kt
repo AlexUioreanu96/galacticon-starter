@@ -44,7 +44,8 @@ class MainActivity : AppCompatActivity(), ImageRequester.ImageRequesterResponse 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-      linearLayoutManager = LinearLayoutManager(this)
+
+        linearLayoutManager = LinearLayoutManager(this)
       recyclerView.layoutManager = linearLayoutManager
 
       imageRequester = ImageRequester(this)
