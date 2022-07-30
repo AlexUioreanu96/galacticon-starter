@@ -26,6 +26,7 @@ import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.IOException
 
@@ -35,6 +36,9 @@ class MainActivity : AppCompatActivity(), ImageRequester.ImageRequesterResponse 
     private lateinit var imageRequester: ImageRequester
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var adapter: RecyclerAdapter
+
+    private val lastVisibleItemPosition: Int
+        get() = linearLayoutManager.findLastVisibleItemPosition()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -74,5 +78,17 @@ class MainActivity : AppCompatActivity(), ImageRequester.ImageRequesterResponse 
             photosList.add(newPhoto)
             adapter.notifyItemInserted(photosList.size - 1)
         }
+    }
+
+    private fun setRecyclerViewScrollListener() {
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                val totalItemCount = recyclerView.layoutManager!!.itemCount
+                if (!imageRequester.isLoadingData && totalItemCount == lastVisibleItemPosition + 1) {
+                    requestPhoto()
+                }
+            }
+        })
     }
 }
