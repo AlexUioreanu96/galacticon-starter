@@ -29,7 +29,8 @@ class RecyclerAdapter(private val photos: ArrayList<Photo>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoHolder {
-        TODO("Not yet implemented")
+//        val inflatedView = parent.inflate(R.layout.recyclerview_item_row, false)
+//        return PhotoHolder(inflatedView)
     }
 
     override fun onBindViewHolder(holder: PhotoHolder, position: Int) {
