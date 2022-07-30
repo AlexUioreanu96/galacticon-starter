@@ -52,7 +52,8 @@ class RecyclerAdapter(private val photos: ArrayList<Photo>) :
     }
 
     override fun onBindViewHolder(holder: PhotoHolder, position: Int) {
-        TODO("Not yet implemented")
+        val itemPhoto = photos[position]
+        holder.bindPhoto(itemPhoto)
     }
 
     override fun getItemCount() = photos.size
