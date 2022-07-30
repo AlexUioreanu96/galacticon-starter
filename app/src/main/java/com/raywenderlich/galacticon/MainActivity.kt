@@ -27,6 +27,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -63,6 +64,8 @@ class MainActivity : AppCompatActivity(), ImageRequester.ImageRequesterResponse 
 
         imageRequester = ImageRequester(this)
         setRecyclerViewScrollListener()
+        setRecyclerViewItemTouchListener()
+
         gridLayoutManager = GridLayoutManager(this, 2)
 
     }
@@ -119,6 +122,29 @@ class MainActivity : AppCompatActivity(), ImageRequester.ImageRequesterResponse 
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun setRecyclerViewItemTouchListener() {
+
+        val itemTouchCallback = object :
+            ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                viewHolder1: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+                val position = viewHolder.layoutPosition
+                photosList.removeAt(position)
+                recyclerView.adapter!!.notifyItemRemoved(position)
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(itemTouchCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 }
 
