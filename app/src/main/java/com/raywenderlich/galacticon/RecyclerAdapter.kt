@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.recyclerview_item_row.view.*
 
 class RecyclerAdapter(private val photos: ArrayList<Photo>) :
     RecyclerView.Adapter<RecyclerAdapter.PhotoHolder>() {
@@ -26,11 +28,19 @@ class RecyclerAdapter(private val photos: ArrayList<Photo>) :
             val showPhotoIntent = Intent(context, PhotoActivity::class.java)
             showPhotoIntent.putExtra(PHOTO_KEY, photo)
             context.startActivity(showPhotoIntent)
+
             Log.d("RecyclerView", "CLICK!")
         }
 
         companion object {
             private val PHOTO_KEY = "PHOTO"
+        }
+
+        fun bindPhoto(photo: Photo) {
+            this.photo = photo
+            Picasso.with(view.context).load(photo.url).into(view.itemImage)
+            view.itemDate.text = photo.humanDate
+            view.itemDescription.text = photo.explanation
         }
     }
 
